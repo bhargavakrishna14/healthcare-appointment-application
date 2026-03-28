@@ -504,14 +504,7 @@ mvn test
 
 ```bash
 # Start MySQL
-# Windows: services.msc → MySQL → Start
-# Mac: brew services start mysql
-# Linux: sudo systemctl start mysql
-
 # Start MongoDB
-# Windows: services.msc → MongoDB → Start
-# Mac: brew services start mongodb-community
-# Linux: sudo systemctl start mongod
 ```
 
 ### Run the Application
@@ -527,8 +520,6 @@ mvn spring-boot:run
 | Username | `admin` |
 | Password | `admin123` |
 | Role | `ADMIN` |
-
----
 
 ---
 
