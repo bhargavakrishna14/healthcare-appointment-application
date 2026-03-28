@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: Healthcare-Appointment-System
+
+  # MySQL
+  datasource:
+    url: jdbc:mysql://localhost:3306/healthcare_db?createDatabaseIfNotExist=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+        cache:
+          use_second_level_cache: true
+          use_query_cache: true
+          region:
+            factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
+        jakarta:
+          cache:
+            provider: org.ehcache.jsr107.EhcacheCachingProvider
+            uri: classpath:ehcache.xml
+
+  # MongoDB
+  mongodb:
+    uri: mongodb://localhost:27017/healthcare_db
+
+  # Spring Cache
+  cache:
+    type: jcache
+    jcache:
+      config: classpath:ehcache.xml
+
+# JWT
+application:
+  security:
+    jwt:
+      secret: WW91clN1cGVyU2VjcmV0S2V5VGhhdElzQXRMZWFzdDI1NkJpdHNMb25nRm9ySFMyNTZBbGdvcml0aG0xMjM0NTY=
+      expiration: 86400000
+
+# Logging
+logging:
+  level:
+    org.example.healthcare: DEBUG
+    org.example.healthcare.aspect: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.cache: DEBUG

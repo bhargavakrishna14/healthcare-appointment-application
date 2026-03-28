@@ -1,0 +1,49 @@
+package com.example.healthcare.controller;
+
+import com.example.healthcare.dto.request.PatientRequest;
+import com.example.healthcare.dto.response.MessageResponse;
+import com.example.healthcare.dto.response.PatientResponse;
+import com.example.healthcare.service.PatientService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/patients")
+@RequiredArgsConstructor
+public class PatientController {
+
+    private final PatientService patientService;
+
+    // ==================== GET (Admin, Doctor) ====================
+
+    @GetMapping
+    public ResponseEntity<List<PatientResponse>> getAllPatients() {
+        return ResponseEntity.ok(patientService.getAllPatients());
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<PatientResponse> getPatientById(@RequestParam Long id) {
+        return ResponseEntity.ok(patientService.getPatientById(id));
+    }
+
+    // ==================== UPDATE (Admin + Patient own) ====================
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PatientResponse> updatePatient(
+            @PathVariable Long id,
+            @Valid @RequestBody PatientRequest request) {
+        return ResponseEntity.ok(patientService.updatePatient(id, request));
+    }
+
+    // ==================== DELETE (Admin only) ====================
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<MessageResponse> deletePatient(@PathVariable Long id) {
+        patientService.deletePatient(id);
+        return ResponseEntity.ok(MessageResponse.builder().message("Patient deleted successfully").build());
+    }
+}
