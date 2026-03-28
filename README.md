@@ -11,7 +11,6 @@ A full-featured **Spring Boot 4** healthcare system for managing patients, docto
 ## 📑 Table of Contents
 
 - [Architecture Overview](#-architecture-overview)
-- [Design Patterns & Strategies](#-design-patterns--strategies)
 - [Spring Concepts Used](#-spring-concepts-used)
 - [Database Design](#-database-design)
 - [API Endpoints](#-api-endpoints)
@@ -88,71 +87,6 @@ A full-featured **Spring Boot 4** healthcare system for managing patients, docto
 
 ---
 
-## 🧠 Design Patterns & Strategies
-
-### 1. **Layered Architecture (N-Tier)**
-```
-Controller → Service → Repository → Database
-```
-Each layer has a single responsibility. Controllers handle HTTP, services handle business logic, repositories handle data access. No layer skips another.
-
-### 2. **Repository Pattern**
-```java
-public interface DoctorRepository extends JpaRepository<Doctor, Long> {
-    List<Doctor> findBySpecialtyContainingIgnoreCase(String specialty);
-}
-```
-Abstracts database access behind interfaces. Spring Data JPA auto-generates implementations at runtime.
-
-### 3. **DTO Pattern (Data Transfer Object)**
-```
-Client ←→ Controller ←→ DTO ←→ Service ←→ Entity ←→ Database
-```
-- **Request DTOs**: validate and accept client input (`DoctorRequest`)
-- **Response DTOs**: shape what the client sees (`DoctorResponse`)
-- **Entities are never exposed** to the client directly
-
-### 4. **Mapper Pattern**
-```java
-public class DoctorMapper {
-    public DoctorResponse toResponse(Doctor doctor) { ... }
-}
-```
-Dedicated classes convert between entities and DTOs. Keeps conversion logic out of services.
-
-### 5. **Builder Pattern (via Lombok)**
-```java
-Doctor.builder()
-    .name("Dr. Smith")
-    .specialty("Cardiology")
-    .build();
-```
-Lombok's `@Builder` generates fluent builder classes for clean object construction.
-
-### 6. **Singleton Pattern (Spring Beans)**
-All Spring beans (`@Service`, `@Repository`, `@Controller`) are singletons by default — one instance shared across the entire application.
-
-### 7. **Proxy Pattern (AOP)**
-```java
-@LogAppointment
-public AppointmentResponse bookAppointment(...) { }
-```
-Spring AOP creates proxy objects around annotated methods to inject logging behavior without modifying business logic.
-
-### 8. **Filter Chain Pattern (Security)**
-```
-Request → JwtFilter → SecurityFilterChain → Controller
-```
-Each filter processes the request and passes it to the next. JWT extraction happens before authorization checks.
-
-### 9. **Strategy Pattern (Cache Providers)**
-Hibernate's caching uses JCache (JSR-107) as an abstraction. Ehcache is the concrete strategy — swappable without code changes.
-
-### 10. **Template Method Pattern (Spring Data)**
-`JpaRepository` and `MongoRepository` provide template methods (`save`, `findById`, `deleteAll`) — you override by defining query method signatures.
-
----
-
 ## 🌱 Spring Concepts Used
 
 | Concept | Where Used | Explanation |
@@ -176,6 +110,8 @@ Hibernate's caching uses JCache (JSR-107) as an abstraction. Ehcache is the conc
 ---
 
 ## 🗄 Database Design
+
+Structured, relational, FK constraints, ACID transactions
 
 ### MySQL (Relational — JPA/Hibernate)
 
@@ -219,6 +155,8 @@ Hibernate's caching uses JCache (JSR-107) as an abstraction. Ehcache is the conc
 
 ### MongoDB (NoSQL — Documents)
 
+Flexible schema, nested arrays, varying fields per record
+
 ```json
 // Prescription Document
 {
@@ -248,13 +186,6 @@ Hibernate's caching uses JCache (JSR-107) as an abstraction. Ehcache is the conc
     "createdAt": "2026-02-18T11:00:00"
 }
 ```
-
-### Why Dual Database?
-
-| Data | Database | Reason |
-|------|----------|--------|
-| Users, Doctors, Patients, Appointments | **MySQL** | Structured, relational, FK constraints, ACID transactions |
-| Prescriptions, Medical Records | **MongoDB** | Flexible schema, nested arrays, varying fields per record |
 
 ---
 
@@ -371,6 +302,11 @@ Hibernate's caching uses JCache (JSR-107) as an abstraction. Ehcache is the conc
 ### Authentication Flow
 
 ```
+Request → JwtFilter → SecurityFilterChain → Controller
+```
+Each filter processes the request and passes it to the next. JWT extraction happens before authorization checks.
+
+```
 1. Client sends POST /api/auth/login { username, password }
                     │
 2. AuthService validates credentials against MySQL
@@ -398,6 +334,8 @@ Hibernate's caching uses JCache (JSR-107) as an abstraction. Ehcache is the conc
 ---
 
 ## ⚡ Caching Strategy
+
+Hibernate's caching uses JCache (JSR-107) as an abstraction. Ehcache is the concrete strategy — swappable without code changes.
 
 ### Three Levels of Caching
 
@@ -447,6 +385,12 @@ public DoctorResponse updateDoctor(Long id, ...) { ... }
 ---
 
 ## 📋 AOP Logging
+
+```java
+@LogAppointment
+public AppointmentResponse bookAppointment(...) { }
+```
+Spring AOP creates proxy objects around annotated methods to inject logging behavior without modifying business logic.
 
 ### Custom Annotations
 
