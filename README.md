@@ -1,4 +1,4 @@
-# 🏥 Smart Healthcare Appointment System
+# 🏥 Healthcare Appointment Application
 
 <div align="center">
 
