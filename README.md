@@ -107,8 +107,6 @@ A full-featured **Spring Boot 4** healthcare system for managing patients, docto
 
 ---
 
----
-
 ## 🗄 Database Design
 
 Structured, relational, FK constraints, ACID transactions
