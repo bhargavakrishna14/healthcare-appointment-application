@@ -498,21 +498,6 @@ mvn test
 ```
 
 
-## 🚀 Running the Application
-
-### Start Required Services
-
-```bash
-# Start MySQL
-# Start MongoDB
-```
-
-### Run the Application
-
-```bash
-mvn spring-boot:run
-```
-
 ### Default Admin Credentials
 
 | Field | Value |
@@ -521,39 +506,3 @@ mvn spring-boot:run
 | Password | `admin123` |
 | Role | `ADMIN` |
 
----
-
-## 📸 Screenshots
-
-### 1. Application Startup
-![App Startup](screenshots/startup.png)
-
-### 2. Postman - Full Collection Run
-![Postman Run](screenshots/postman-run.png)
-
-### 3. Postman - Appointment Booking
-![Book Appointment](screenshots/book-appointment.png)
-
-### 4. Postman - Double Booking Rejected
-![Double Booking](screenshots/double-booking.png)
-
-### 5. Postman - Security (401 & 403)
-![Security 401](screenshots/security-401.png)
-![Security 403](screenshots/security-403.png)
-
-### 6. Unit Tests Passing
-![Unit Tests](screenshots/unit-tests.png)
-
-### 7. MySQL Database
-![MySQL](screenshots/mysql-tables.png)
-
-### 8. MongoDB Collections
-![MongoDB](screenshots/mongodb-collections.png)
-
-### 9. AOP Logging
-![AOP Logs](screenshots/aop-logging.png)
-
-### 10. Cache Behavior
-![Cache](screenshots/cache-logs.png)
-
----
